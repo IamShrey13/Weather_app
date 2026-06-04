@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const weatherData = await fetchWeatherData(city);
             displayWeatherData(weatherData);
         } catch (error) {
+            console.error(error);
             showError();
         }
 
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function fetchWeatherData(city){
         //gets the data
-        const URL = `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API_KEY}`;
+        const URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
 
         const response = await fetch(URL);
 
@@ -43,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
         //display
         const {name, main, weather} = data;
         cityName.textContent = name;
-        Temperature.textContent = `Temperature ${main.Temperature}`;
-        Description.textContent = `Weather: ${weather.Description}`
+        Temperature.textContent = `Temperature: ${main.temp}°C`;
+        Description.textContent = `Weather: ${weather[0].description}`;
 
         //unlock the display
         weatherInfo.classList.remove('hidden');
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function showError(){
-        weatherInfo.classList.remove('hidden');
-        errorMessage.classList.add('hidden');
+        weatherInfo.classList.add('hidden');
+        errorMessage.classList.remove('hidden');
     }
 });
